@@ -1,0 +1,7 @@
+flask
+torch>=1.13.0
+ultralytics
+opencv-python
+numpy
+onnxruntime      # optional: for ONNX speedup (see notes)
+pillow
