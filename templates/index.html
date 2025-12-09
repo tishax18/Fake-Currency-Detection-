@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fake Note Detector</title>
+    <style>
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #58a6ff;
+        }
+
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            background: #161b22;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            color: #e6edf3;
+        }
+
+        button {
+            background: #238636;
+            color: white;
+            padding: 12px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 12px; /* Rounded button */
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #2ea043;
+        }
+
+        img {
+            display: block;
+            margin: 15px auto;
+            border-radius: 10px;
+            border: 2px solid #30363d;
+        }
+
+        table {
+            width: 60%;
+            margin: 25px auto;
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #1f6feb;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            background: #161b22;
+            padding: 10px;
+            color: #e6edf3;
+            border-bottom: 1px solid #30363d;
+            text-align: center;
+        }
+
+        .fake-text {
+            color: #ff7b72;
+            text-align: center;
+        }
+
+        .real-text {
+            color: #3fb950;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Fake Note Detector</h1>
+
+<form action="/detect" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" required>
+    
+    <button type="submit">Upload & Detect</button>
+</form>
+
+{% if uploaded %}
+    <h2>Uploaded Image:</h2>
+    <img src="/static/uploads/{{ uploaded }}" width="300">
+{% endif %}
+
+{% if error %}
+    <h2 style="color:red;">{{ error }}</h2>
+{% endif %}
+
+{% if feature_boxed %}
+    <h2>Detected Features (YOLO bounding boxes):</h2>
+    <img src="/static/uploads/{{ feature_boxed }}" width="300">
+{% endif %}
+
+{% if results %}
+    <h2>Feature Results:</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Feature</th>
+            <th>Similarity Score</th>
+            <th>Status</th>
+            
+        </tr>
+        {% for r in results %}
+        <tr>
+            <td>{{ r.feature }}</td>
+            <td>{{ r.score }}</td>
+            <td>{{ r.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+{% if final_status %}
+    {% if final_status == "FAKE NOTE" %}
+        <h2 style="color: red;">{{ final_status }}</h2>
+    {% else %}
+        <h2 style="color: green;">{{ final_status }}</h2>
+    {% endif %}
+{% endif %}
+
+
+
+</body>
+</html>
